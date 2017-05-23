@@ -6,7 +6,7 @@ public class Plugin_Socket_cpp : ModuleRules
 {
 	public Plugin_Socket_cpp(TargetInfo Target)
 	{
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "C2I_Socket" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
