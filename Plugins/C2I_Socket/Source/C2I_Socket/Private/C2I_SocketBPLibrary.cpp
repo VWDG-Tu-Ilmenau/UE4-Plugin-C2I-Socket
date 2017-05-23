@@ -24,7 +24,13 @@ void UC2I_SocketBPLibrary::C2I_Connect()
 	bIsOn = true;
 }
 
-void UC2I_SocketBPLibrary::C2I_Send(FString _val)
+void UC2I_SocketBPLibrary::C2I_SendString(FString _val)
+{
+	if (bIsOn)
+		C2I_SingletonSocket::GetInstance().Send(_val);
+}
+
+void UC2I_SocketBPLibrary::C2I_SendFloat(float _val)
 {
 	if (bIsOn)
 		C2I_SingletonSocket::GetInstance().Send(_val);
@@ -41,9 +47,9 @@ void UC2I_SocketBPLibrary::C2I_StopSending()
 	C2I_SingletonSocket::GetInstance().StopSending();
 }
 
-void UC2I_SocketBPLibrary::C2I_ListenForConnection()
+void UC2I_SocketBPLibrary::C2I_ListenForConnection(FString _ip, int32 _port)
 {
-	C2I_SingletonSocket::GetInstance().ListenForConnection();
+	C2I_SingletonSocket::GetInstance().ListenForConnection(_ip, _port);
 	bIsOn = true;
 
 }

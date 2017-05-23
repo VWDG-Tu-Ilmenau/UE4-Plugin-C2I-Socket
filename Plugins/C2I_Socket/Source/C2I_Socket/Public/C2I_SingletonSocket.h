@@ -22,11 +22,14 @@ namespace C2I_Socket
 		//Sends a String via an established socket connection.
 		void Send(FString _val);
 
+		//Sends a String via an established socket connection.
+		void Send(float _val);
+
 		//Stops sending with a bool flag.
 		void StopSending();
 
 		//Spawns a thread and waits for a client connection.
-		void ListenForConnection();
+		void ListenForConnection(FString _ip, int32 _port);
 
 	private:
 		C2I_SingletonSocket();

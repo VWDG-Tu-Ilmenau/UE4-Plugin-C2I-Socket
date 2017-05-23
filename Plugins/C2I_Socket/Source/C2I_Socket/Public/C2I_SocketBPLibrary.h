@@ -33,20 +33,23 @@ class UC2I_SocketBPLibrary : public UBlueprintFunctionLibrary
 	//UFUNCTION(BlueprintCallable, meta = (DisplayName = "Execute Sample function", Keywords = "C2I_Socket sample test testing"), Category = "C2I_SocketTesting")
 		//static float C2I_SocketSampleFunction(float Param);
 
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "GetC2ISocket", Keywords = "C2I_Socket get socket"), Category = "C2I Socket")
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "GetC2ISocket", Keywords = "C2I_Socket get socket"), Category = "C2I")
 		static void C2I_Connect();
 
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "SendViaC2ISocket", Keywords = "C2I_Socket send socket"), Category = "C2I Socket")
-		static void C2I_Send(FString _val);
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "SendViaC2ISocketString", Keywords = "C2I_Socket send socket string"), Category = "C2I")
+		static void C2I_SendString(FString _val);
+
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "SendViaC2ISocketFloat", Keywords = "C2I_Socket send socket float"), Category = "C2I")
+		static void C2I_SendFloat(float _val);
 
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "QuitC2ISocket", Keywords = "C2I_Socket quit socket"), Category = "C2I Socket")
 		static void C2I_Quit();
 
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "StopSendingViaC2ISocket", Keywords = "C2I_Socket stop sending socket"), Category = "C2I Socket")
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "StopSendingViaC2ISocket", Keywords = "C2I_Socket stop sending socket"), Category = "C2I")
 		static void C2I_StopSending();
 
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "ListenForConnectionWithC2ISocket", Keywords = "C2I_Socket listen socket"), Category = "C2I Socket")
-		static void C2I_ListenForConnection();
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "ListenForConnectionWithC2ISocket", Keywords = "C2I_Socket listen socket"), Category = "C2I")
+		static void C2I_ListenForConnection(FString _ip = "127.0.0.1", int32 _port=12345);
 
 private:
 

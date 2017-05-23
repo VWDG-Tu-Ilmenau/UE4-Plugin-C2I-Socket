@@ -27,13 +27,15 @@ namespace C2I_Socket
 
 		virtual uint32 Run() override;
 		//Spawns a thread and listens for connections
-		void ListenForConnection();
+		void ListenForConnection(FString _ip, int32 _port);
 
 		//Listens for connection without spawning a thread
 		void SetupSocketServer();
 
 		//Sends a string via an established socket connection
 		void Send(FString _val);
+
+		void Send(float _val);
 
 		//Closes sockets, and stops sending with a flag.
 		void QuitMe();
@@ -50,6 +52,11 @@ namespace C2I_Socket
 		FCriticalSection MyMutex;
 		bool bIsSend;
 
+		void SetIP(FString _ip);
+		void SetPort(int32 _port);
+
+		FString IP = "127.0.0.1";
+		int32 Port = 12345;
 
 	};
 

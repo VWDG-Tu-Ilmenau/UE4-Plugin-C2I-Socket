@@ -35,11 +35,12 @@ uint32 ConnectionInterface::Run()
 	return 3791;
 }
 
-void ConnectionInterface::ListenForConnection()
+void C2I_Socket::ConnectionInterface::ListenForConnection(FString _ip, int32 _port)
 {
 	UE_LOG(LogTemp, Log, TEXT("ListenForConnection"));
-
-
+	
+	SetIP(_ip);
+	SetPort(_port);
 
 	Thread = FRunnableThread::Create(this, TEXT("Test")); //windows default = 8mb for thread, could specify more
 //	Runnable = new ConnectionInterface();
@@ -56,8 +57,8 @@ void ConnectionInterface::SetupSocketServer()
 
 	Socket = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateSocket(NAME_Stream, TEXT("default"), false);
 
-	FString address = TEXT("127.0.0.1");
-	int32 port = 12345;
+	FString address = IP;
+	int32 port = Port;
 
 	FIPv4Address ip;
 	FIPv4Address::Parse(address, ip);
@@ -119,6 +120,28 @@ void ConnectionInterface::Send(FString _val)
 
 }
 
+
+void C2I_Socket::ConnectionInterface::Send(float _val)
+{
+	if (MyMutex.TryLock())
+	{
+
+		
+		FString serialized = FString::SanitizeFloat(_val);
+		TCHAR *serializedChar = serialized.GetCharArray().GetData();
+		int32 size = FCString::Strlen(serializedChar);
+		int32 sent = 0;
+		bool successful = false;
+		if (FinalSocket && Socket && bIsSend && bIsConnected)
+		{
+			successful = FinalSocket->Send((uint8*)TCHAR_TO_UTF8(serializedChar), size, sent);
+
+		}
+
+		MyMutex.Unlock();
+	}
+}
+
 void ConnectionInterface::QuitMe()
 {
 	MyMutex.Lock();
@@ -148,4 +171,15 @@ void ConnectionInterface::QuitMe()
 void ConnectionInterface::StopSending()
 {
 	bIsSend = false;
+}
+
+
+void ConnectionInterface::SetIP(FString _ip)
+{
+	IP = _ip;
+}
+
+void ConnectionInterface::SetPort(int32 _port)
+{
+	Port = _port;
 }

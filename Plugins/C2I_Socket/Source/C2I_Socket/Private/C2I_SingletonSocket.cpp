@@ -35,6 +35,12 @@ void C2I_SingletonSocket::Send(FString _val)
 		connectionInterface->Send(_val);
 }
 
+void C2I_SingletonSocket::Send(float _val)
+{
+	if (connectionInterface)
+		connectionInterface->Send(_val);
+}
+
 void C2I_SingletonSocket::StopSending()
 {
 	
@@ -43,8 +49,8 @@ void C2I_SingletonSocket::StopSending()
 	
 }
 
-void C2I_SingletonSocket::ListenForConnection()
+void C2I_Socket::C2I_SingletonSocket::ListenForConnection(FString _ip, int32 _port)
 {
 	connectionInterface = new ConnectionInterface();
-	connectionInterface->ListenForConnection();
+	connectionInterface->ListenForConnection(_ip, _port);
 }
