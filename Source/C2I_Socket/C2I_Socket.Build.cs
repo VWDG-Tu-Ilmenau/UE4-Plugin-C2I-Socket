@@ -4,8 +4,8 @@ using UnrealBuildTool;
 
 public class C2I_Socket : ModuleRules
 {
-	public C2I_Socket(TargetInfo Target)
-	{
+	public C2I_Socket(ReadOnlyTargetRules Target) : base(Target)
+    {
 		
 		PublicIncludePaths.AddRange(
 			new string[] {
