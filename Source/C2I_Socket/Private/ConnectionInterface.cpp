@@ -1,6 +1,7 @@
+#include "ConnectionInterface.h"
+
 #include "C2I_Socket.h"
 
-#include "ConnectionInterface.h"
 
 #include "Runtime/Sockets/Public/SocketSubsystem.h"
 

@@ -1,8 +1,7 @@
 // Copyright 1998-2017 Epic Games, Inc. All Rights Reserved.
-
-#include "C2I_Socket.h"
 #include "C2I_SocketBPLibrary.h"
 #include "C2I_SingletonSocket.h"
+#include "C2I_Socket.h"
 
 UC2I_SocketBPLibrary::UC2I_SocketBPLibrary(const FObjectInitializer& ObjectInitializer)
 : Super(ObjectInitializer)
