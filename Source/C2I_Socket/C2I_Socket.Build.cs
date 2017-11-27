@@ -6,8 +6,10 @@ public class C2I_Socket : ModuleRules
 {
 	public C2I_Socket(ReadOnlyTargetRules Target) : base(Target)
     {
-		
-		PublicIncludePaths.AddRange(
+        PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
+
+
+        PublicIncludePaths.AddRange(
 			new string[] {
 				"C2I_Socket/Public"
 				
