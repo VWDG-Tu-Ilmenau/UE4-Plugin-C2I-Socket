@@ -121,7 +121,6 @@ void ConnectionInterface::Send(FString _val)
 
 }
 
-
 void C2I_Socket::ConnectionInterface::Send(float _val)
 {
 	if (MyMutex.TryLock())
@@ -141,6 +140,79 @@ void C2I_Socket::ConnectionInterface::Send(float _val)
 
 		MyMutex.Unlock();
 	}
+}
+
+//untested!
+void C2I_Socket::ConnectionInterface::Send(int32 _val)
+{
+	if (MyMutex.TryLock())
+	{
+
+		FString serialized = FString::FromInt(_val);
+		TCHAR *serializedChar = serialized.GetCharArray().GetData();
+		int32 size = FCString::Strlen(serializedChar);
+		int32 sent = 0;
+		bool successful = false;
+		if (FinalSocket && Socket && bIsSend && bIsConnected)
+		{
+			successful = FinalSocket->Send((uint8*)TCHAR_TO_UTF8(serializedChar), size, sent);
+
+		}
+
+		MyMutex.Unlock();
+	}
+}
+
+
+void C2I_Socket::ConnectionInterface::SendAsGPB(int32 _val)
+{
+	if (MyMutex.TryLock())
+	{
+
+		FString t = "";
+
+		std::string _targetComponent = "VCRPM";
+		std::string _targetCommand = "updateRPM";
+		std::string _eVNameCustom = "RPM";
+
+		c2ipb::Call datapacket;
+	   
+		datapacket.set_targetcomponent(_targetComponent);
+		datapacket.set_targetcommand(_targetCommand);
+		c2ipb::Call_Event* datapacketevent = datapacket.mutable_event();
+
+	datapacketevent->set_eventname(_eVNameCustom);
+	
+	
+	datapacketevent->set_eventtype(c2ipb::Call_Event_EventType_TYPEINT);
+	
+	datapacketevent->set_val_int(_val);
+
+	//res = GetFinalGPBStringDash(datapacket, isDebug);
+
+	
+
+
+		FString serialized = FString::FromInt(_val);
+		TCHAR *serializedChar = serialized.GetCharArray().GetData();
+		int32 size = FCString::Strlen(serializedChar);
+		int32 sent = 0;
+		bool successful = false;
+
+
+		if (FinalSocket && Socket && bIsSend && bIsConnected)
+		{
+			successful = FinalSocket->Send((uint8*)TCHAR_TO_UTF8(serializedChar), size, sent);
+
+		}
+
+		MyMutex.Unlock();
+	}
+}
+
+void C2I_Socket::ConnectionInterface::SendSize()
+{
+
 }
 
 void ConnectionInterface::QuitMe()

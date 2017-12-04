@@ -7,6 +7,10 @@
 
 #include "Runtime/Core/Public/HAL/RunnableThread.h"
 
+#include "AllowWindowsPlatformTypes.h"
+#include "MessageC2I_to_Dispatcher.pb.h"
+#include "HideWindowsPlatformTypes.h"
+
 
 /************************************************************************/
 /* Creates a TCP Server                                                 */
@@ -32,10 +36,16 @@ namespace C2I_Socket
 		//Listens for connection without spawning a thread
 		void SetupSocketServer();
 
-		//Sends a string via an established socket connection
+		//Send a value via an established socket connection
 		void Send(FString _val);
-
 		void Send(float _val);
+		void Send(int32 _val);
+
+		//Send a GPB with a value via an established socket connection
+		void SendAsGPB(int32 _val);
+
+		//Sends size of payload
+		void SendSize();
 
 		//Closes sockets, and stops sending with a flag.
 		void QuitMe();
@@ -59,7 +69,4 @@ namespace C2I_Socket
 		int32 Port = 12345;
 
 	};
-
-
-
 }

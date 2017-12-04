@@ -33,14 +33,39 @@ class UC2I_SocketBPLibrary : public UBlueprintFunctionLibrary
 	//UFUNCTION(BlueprintCallable, meta = (DisplayName = "Execute Sample function", Keywords = "C2I_Socket sample test testing"), Category = "C2I_SocketTesting")
 		//static float C2I_SocketSampleFunction(float Param);
 
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "GetC2ISocket", Keywords = "C2I_Socket get socket"), Category = "C2I")
-		static void C2I_Connect();
+	/************************************************************************/
+	/* Send as value                                                        */
+	/************************************************************************/
 
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "SendViaC2ISocketString", Keywords = "C2I_Socket send socket string"), Category = "C2I")
 		static void C2I_SendString(FString _val);
 
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "SendViaC2ISocketFloat", Keywords = "C2I_Socket send socket float"), Category = "C2I")
 		static void C2I_SendFloat(float _val);
+
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "SendViaC2ISocketInt", Keywords = "C2I_Socket send socket int"), Category = "C2I")
+		static void C2I_SendInt(int32 _val);
+
+
+	/************************************************************************/
+	/* Send as GPB                                                          */
+	/************************************************************************/
+
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "SendViaC2ISocketStringAsGPB", Keywords = "C2I_Socket send socket string GPB"), Category = "C2I")
+		static void C2I_SendStringAsGPB(FString _val);
+
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "SendViaC2ISocketFloatAsGPB", Keywords = "C2I_Socket send socket float GPB"), Category = "C2I")
+		static void C2I_SendFloatAsGPB(float _val);
+
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "SendViaC2ISocketIntAsGPB", Keywords = "C2I_Socket send socket int GPB"), Category = "C2I")
+		static void C2I_SendIntAsGPB(int32 _val);
+
+	/************************************************************************/
+	/* Management methods                                                   */
+	/************************************************************************/
+
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "GetC2ISocket", Keywords = "C2I_Socket get socket"), Category = "C2I")
+		static void C2I_Connect();
 
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "QuitC2ISocket", Keywords = "C2I_Socket quit socket"), Category = "C2I Socket")
 		static void C2I_Quit();
