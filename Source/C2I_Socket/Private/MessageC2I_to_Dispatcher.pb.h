@@ -102,7 +102,7 @@ class Call_Event : public ::google::protobuf::Message /* @@protoc_insertion_poin
     *this = ::std::move(from);
   }
 
-  inline Call_Event& operator=(Call_Event&& from) noexcept {
+  inline Call_Event& operator=(Call_Event&& from) {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -307,7 +307,7 @@ class Call : public ::google::protobuf::Message /* @@protoc_insertion_point(clas
     *this = ::std::move(from);
   }
 
-  inline Call& operator=(Call&& from) noexcept {
+  inline Call& operator=(Call&& from) {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
