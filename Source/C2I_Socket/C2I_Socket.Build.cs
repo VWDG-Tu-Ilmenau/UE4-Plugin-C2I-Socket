@@ -61,7 +61,7 @@ public class C2I_Socket : ModuleRules
 			}
 			);
 
-            LoadGoogleProtocolBuffers(Target);
+        LoadGoogleProtocolBuffers(Target);
 
     }
 
