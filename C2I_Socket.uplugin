@@ -14,11 +14,11 @@
 	"IsBetaVersion": true,
 	"Installed": false,
 	"Modules": [
-		{
-			"Name": "C2I_Socket",
-			"Type": "Runtime",
-			"LoadingPhase": "PreLoadingScreen",
-			 "BlacklistPlatforms" : [ "IOS", "HTML5" ]
-		}
+    {
+      "Name": "C2I_Socket",
+      "Type": "Runtime",
+      "LoadingPhase": "Default",
+      "BlacklistPlatforms": [ "IOS", "HTML5" ]
+    }
 	]
 }
