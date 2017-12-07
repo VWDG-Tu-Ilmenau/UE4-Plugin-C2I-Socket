@@ -44,9 +44,6 @@ namespace C2I_Socket
 		//Send a GPB with a value via an established socket connection
 		void SendAsGPB(int32 _val, FString _targetComponent, FString _targetCommand, FString _evName);
 
-		//Sends size of payload
-		void SendSize();
-
 		//Closes sockets, and stops sending with a flag.
 		void QuitMe();
 
