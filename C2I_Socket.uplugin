@@ -16,7 +16,7 @@
 	"Modules": [
     {
       "Name": "C2I_Socket",
-      "Type": "Runtime",
+      "Type": "Developer",
       "LoadingPhase": "Default",
       "BlacklistPlatforms": [ "IOS", "HTML5" ]
     }
