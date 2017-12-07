@@ -27,10 +27,10 @@ void C2I_SingletonSocket::Send(float _val)
 		connectionInterface->Send(_val);
 }
 
-void C2I_SingletonSocket::Send(int32 _val, FString _targetComponent, FString _targetCommand, FString _evName)
+void C2I_SingletonSocket::Send(int32 _val)
 {
 	if (connectionInterface)
-		connectionInterface->Send(_val, _targetComponent, _targetCommand, _evName);
+		connectionInterface->Send(_val);
 }
 
 

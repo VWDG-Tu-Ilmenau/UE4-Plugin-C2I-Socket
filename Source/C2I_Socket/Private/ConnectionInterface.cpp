@@ -168,11 +168,11 @@ void C2I_Socket::ConnectionInterface::SendAsGPB(int32 _val, FString _targetCompo
 		//prepare package
 		c2ipb::Call datapacket;
 	   
-		datapacket.set_targetcomponent(_targetComponent);
-		datapacket.set_targetcommand(_targetCommand);
+		datapacket.set_targetcomponent(TCHAR_TO_UTF8(*_targetComponent));
+		datapacket.set_targetcommand(TCHAR_TO_UTF8(*_targetCommand));
 		c2ipb::Call_Event* datapacketevent = datapacket.mutable_event();
 
-		datapacketevent->set_eventname(_evName);
+		datapacketevent->set_eventname(TCHAR_TO_UTF8(*_evName));
 		datapacketevent->set_eventtype(c2ipb::Call_Event_EventType_TYPEINT);
 		datapacketevent->set_val_int(_val);
 
@@ -193,7 +193,8 @@ void C2I_Socket::ConnectionInterface::SendAsGPB(int32 _val, FString _targetCompo
 		//prepare payload
 		TCHAR* serializedCharPayload = f.GetCharArray().GetData();		
 		int32 sizePayload = FCString::Strlen(serializedCharPayload);
-		
+		int32 sizePayload2 = res.length();
+		int32 sizePayload3 = std::strlen(res.c_str());
 // 		
 
 		//prepare size
