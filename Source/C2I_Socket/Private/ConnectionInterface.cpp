@@ -115,7 +115,6 @@ void ConnectionInterface::Send(FString _val)
 			successful = FinalSocket->Send((uint8*)TCHAR_TO_UTF8(serializedChar), size, sent);
 
 		}
-
 		MyMutex.Unlock();
 	}
 
@@ -147,7 +146,6 @@ void C2I_Socket::ConnectionInterface::Send(int32 _val)
 {
 	if (MyMutex.TryLock())
 	{
-
 		FString serialized = FString::FromInt(_val);
 		TCHAR *serializedChar = serialized.GetCharArray().GetData();
 		int32 size = FCString::Strlen(serializedChar);
@@ -158,52 +156,81 @@ void C2I_Socket::ConnectionInterface::Send(int32 _val)
 			successful = FinalSocket->Send((uint8*)TCHAR_TO_UTF8(serializedChar), size, sent);
 
 		}
-
 		MyMutex.Unlock();
 	}
 }
 
 
-void C2I_Socket::ConnectionInterface::SendAsGPB(int32 _val)
+void C2I_Socket::ConnectionInterface::SendAsGPB(int32 _val, FString _targetComponent, FString _targetCommand, FString _evName)
 {
 	if (MyMutex.TryLock())
 	{
-
-		FString t = "";
-
-		std::string _targetComponent = "VCRPM";
-		std::string _targetCommand = "updateRPM";
-		std::string _eVNameCustom = "RPM";
-
+		//prepare package
 		c2ipb::Call datapacket;
 	   
 		datapacket.set_targetcomponent(_targetComponent);
 		datapacket.set_targetcommand(_targetCommand);
 		c2ipb::Call_Event* datapacketevent = datapacket.mutable_event();
 
-	datapacketevent->set_eventname(_eVNameCustom);
-	
-	
-	datapacketevent->set_eventtype(c2ipb::Call_Event_EventType_TYPEINT);
-	
-	datapacketevent->set_val_int(_val);
+		datapacketevent->set_eventname(_evName);
+		datapacketevent->set_eventtype(c2ipb::Call_Event_EventType_TYPEINT);
+		datapacketevent->set_val_int(_val);
 
-	//res = GetFinalGPBStringDash(datapacket, isDebug);
+		//Get final string
+	 	bool isDebug = false;
+		std::string res="";
+		if (isDebug)
+		{
+			res = datapacket.DebugString();
+		}
+		else
+		{
+			datapacket.SerializeToString(&res);
+		}
+		FString f(res.c_str());
 
-	
+		
+		//prepare payload
+		TCHAR* serializedCharPayload = f.GetCharArray().GetData();		
+		int32 sizePayload = FCString::Strlen(serializedCharPayload);
+		
+// 		
 
+		//prepare size
+		uint8_t* datablock = (uint8_t*)&sizePayload;
 
-		FString serialized = FString::FromInt(_val);
-		TCHAR *serializedChar = serialized.GetCharArray().GetData();
-		int32 size = FCString::Strlen(serializedChar);
-		int32 sent = 0;
-		bool successful = false;
+		UE_LOG(LogTemp, Log, TEXT("%d"), sizePayload);
 
-
+		int32 sentSize = 0;
+		bool successfulSize = false;
+		//send size
 		if (FinalSocket && Socket && bIsSend && bIsConnected)
 		{
-			successful = FinalSocket->Send((uint8*)TCHAR_TO_UTF8(serializedChar), size, sent);
+			successfulSize = FinalSocket->Send(datablock, sizeof(int32), sentSize);
+		}
+		if (!successfulSize)
+		{
+			UE_LOG(LogTemp, Log, TEXT("Sending size: unsuccesful."));
+		}
+		if (sentSize != sizeof(int32))
+		{
+			UE_LOG(LogTemp, Log, TEXT("Sending Size size: bytes send != bytes size."));
+		}
 
+		int32 sentPayload = 0;
+		bool successfulPayload = false;
+		//send payload
+		if (FinalSocket && Socket && bIsSend && bIsConnected)
+		{
+			successfulPayload = FinalSocket->Send((uint8_t*)res.c_str(), sizePayload, sentPayload);
+		}
+		if (!successfulPayload)
+		{
+			UE_LOG(LogTemp, Log, TEXT("Sending payload: unsuccesful."));
+		}
+		if (sentSize != sizeof(int32))
+		{
+			UE_LOG(LogTemp, Log, TEXT("Sending payload size: bytes send != bytes size."));
 		}
 
 		MyMutex.Unlock();

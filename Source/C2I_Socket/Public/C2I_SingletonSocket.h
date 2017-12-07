@@ -39,7 +39,7 @@ namespace C2I_Socket
 		void SendAsGBP(FString _val);
 
 		//Sends a float value packed in a GPB via an established socket connection
-		void SendAsGBP(int32 _val);
+		void SendAsGBP(int32 _val, FString _targetComponent, FString _targetCommand, FString _evName);
 
 		/************************************************************************/
 		/* Management                                                           */

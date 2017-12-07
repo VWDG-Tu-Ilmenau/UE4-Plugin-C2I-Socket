@@ -61,10 +61,10 @@ void UC2I_SocketBPLibrary::C2I_SendStringAsGPB(FString _val)
 		C2I_SingletonSocket::GetInstance().SendAsGBP(_val);
 }
 
-void UC2I_SocketBPLibrary::C2I_SendIntAsGPB(int32 _val)
+void UC2I_SocketBPLibrary::C2I_SendIntAsGPB(int32 _val, FString _targetComponent, FString _targetCommand, FString _evName)
 {
 	if (bIsOn)
-		C2I_SingletonSocket::GetInstance().SendAsGBP(_val);
+		C2I_SingletonSocket::GetInstance().SendAsGBP(_val,_targetComponent, _targetCommand, _evName);
 }
 
 /************************************************************************/

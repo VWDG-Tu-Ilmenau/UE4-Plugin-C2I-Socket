@@ -58,7 +58,7 @@ class UC2I_SocketBPLibrary : public UBlueprintFunctionLibrary
 		static void C2I_SendFloatAsGPB(float _val);
 
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "SendViaC2ISocketIntAsGPB", Keywords = "C2I_Socket send socket int GPB"), Category = "C2I")
-		static void C2I_SendIntAsGPB(int32 _val);
+		static void C2I_SendIntAsGPB(int32 _val, FString _targetComponent, FString _targetCommand, FString _evName );
 
 	/************************************************************************/
 	/* Management methods                                                   */
