@@ -30,7 +30,7 @@ ConnectionInterface::~ConnectionInterface()
 
 uint32 ConnectionInterface::Run()
 {
-	UE_LOG(LogTemp, Log, TEXT("Run"));
+	UE_LOG(C2SLog, Log, TEXT("Run"));
 
 	SetupSocketServer();
 	return 3791;
@@ -38,7 +38,7 @@ uint32 ConnectionInterface::Run()
 
 void C2I_Socket::ConnectionInterface::ListenForConnection(FString _ip, int32 _port)
 {
-	UE_LOG(LogTemp, Log, TEXT("ListenForConnection"));
+	UE_LOG(C2SLog, Log, TEXT("ListenForConnection"));
 	
 	SetIP(_ip);
 	SetPort(_port);
@@ -74,11 +74,11 @@ void ConnectionInterface::SetupSocketServer()
 
 	if (bind)
 	{
-		UE_LOG(LogTemp, Log, TEXT("Socket bound."));
+		UE_LOG(C2SLog, Log, TEXT("Socket bound."));
 	}
 	else
 	{
-		UE_LOG(LogTemp, Log, TEXT("Socket not bound.1"));	
+		UE_LOG(C2SLog, Log, TEXT("Socket not bound.1"));	
 		ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->GetSocketError();
 		return;
 	}
@@ -87,11 +87,11 @@ void ConnectionInterface::SetupSocketServer()
 
 	if (listen)
 	{
-		UE_LOG(LogTemp, Log, TEXT("Socket listens."));
+		UE_LOG(C2SLog, Log, TEXT("Socket listens."));
 	}
 	else
 	{
-		UE_LOG(LogTemp, Log, TEXT("Socket not listening."));
+		UE_LOG(C2SLog, Log, TEXT("Socket not listening."));
 		return;
 	}
 
@@ -220,11 +220,11 @@ void C2I_Socket::ConnectionInterface::SendGPB(std::string res)
 	}
 	if (!successfulSize)
 	{
-		UE_LOG(LogTemp, Log, TEXT("Sending size: unsuccesful."));
+		UE_LOG(C2SLog, Log, TEXT("Sending size: unsuccesful."));
 	}
 	if (sentSize != sizeof(int32))
 	{
-		UE_LOG(LogTemp, Log, TEXT("Sending Size size: bytes send != bytes size."));
+		UE_LOG(C2SLog, Log, TEXT("Sending Size size: bytes send != bytes size."));
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -237,11 +237,11 @@ void C2I_Socket::ConnectionInterface::SendGPB(std::string res)
 	}
 	if (!successfulPayload)
 	{
-		UE_LOG(LogTemp, Log, TEXT("Sending payload: unsuccesful."));
+		UE_LOG(C2SLog, Log, TEXT("Sending payload: unsuccesful."));
 	}
 	if (sentPayload != sizeof(int32))
 	{
-		UE_LOG(LogTemp, Log, TEXT("Sending payload size: bytes send != bytes size."));
+		UE_LOG(C2SLog, Log, TEXT("Sending payload size: bytes send != bytes size."));
 	}
 }
 
@@ -256,16 +256,16 @@ void ConnectionInterface::QuitMe()
 	if (FinalSocket)
 	{
 		if (!FinalSocket->Close())
-			UE_LOG(LogTemp, Log, TEXT("FinalSocket not closed."));
+			UE_LOG(C2SLog, Log, TEXT("FinalSocket not closed."));
 	}
 
 	if (Socket)
 	{
 		if (!Socket->Close())
-			UE_LOG(LogTemp, Log, TEXT("Socket not closed."));
+			UE_LOG(C2SLog, Log, TEXT("Socket not closed."));
 	}
 
-	UE_LOG(LogTemp, Log, TEXT("All Sockets closed."));
+	UE_LOG(C2SLog, Log, TEXT("All Sockets closed."));
 
 
 	MyMutex.Unlock();

@@ -20,3 +20,6 @@ void FC2I_SocketModule::ShutdownModule()
 #undef LOCTEXT_NAMESPACE
 	
 IMPLEMENT_MODULE(FC2I_SocketModule, C2I_Socket)
+
+DEFINE_LOG_CATEGORY_STATIC(C2SLog, Log, All);
+

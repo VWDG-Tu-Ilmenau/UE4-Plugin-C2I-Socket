@@ -7,7 +7,6 @@ using namespace C2I_Socket;
 
 C2I_SingletonSocket::C2I_SingletonSocket()
 {
-	UE_LOG(LogTemp, Log, TEXT("C2I_SingletonSocket created."));
 
 }
 
@@ -75,7 +74,6 @@ void C2I_Socket::C2I_SingletonSocket::ListenForConnection(FString _ip, int32 _po
 
 void C2I_SingletonSocket::QuitMe()
 {
-	UE_LOG(LogTemp, Log, TEXT("C2I_SingletonSocket quit."));
 	if (connectionInterface)
 	{
 		connectionInterface->StopSending();
@@ -87,7 +85,7 @@ void C2I_SingletonSocket::QuitMe()
 
 void C2I_SingletonSocket::Connect()
 {
-	UE_LOG(LogTemp, Log, TEXT("C2I_SingletonSocket connect."));
+	
 	connectionInterface = new ConnectionInterface();
 	connectionInterface->SetupSocketServer();
 }
