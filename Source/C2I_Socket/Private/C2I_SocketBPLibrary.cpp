@@ -23,6 +23,10 @@ void UC2I_SocketBPLibrary::C2I_Connect()
 	bIsOn = true;
 }
 
+/************************************************************************/
+/* Value                                                                */
+/************************************************************************/
+
 void UC2I_SocketBPLibrary::C2I_SendString(FString _val)
 {
 	if (bIsOn)
@@ -34,6 +38,38 @@ void UC2I_SocketBPLibrary::C2I_SendFloat(float _val)
 	if (bIsOn)
 		C2I_SingletonSocket::GetInstance().Send(_val);
 }
+
+void UC2I_SocketBPLibrary::C2I_SendInt(int32 _val)
+{
+	if (bIsOn)
+		C2I_SingletonSocket::GetInstance().Send(_val);
+}
+
+/************************************************************************/
+/* GPB                                                                  */
+/************************************************************************/
+
+void UC2I_SocketBPLibrary::C2I_SendFloatAsGPB(float _val, FString _targetComponent, FString _targetCommand, FString _evName, bool _isDebug)
+{
+	if (bIsOn)
+		C2I_SingletonSocket::GetInstance().SendAsGBP(_val, _targetComponent, _targetCommand, _evName, _isDebug);
+}
+
+void UC2I_SocketBPLibrary::C2I_SendStringAsGPB(FString _val, FString _targetComponent, FString _targetCommand, FString _evName, bool _isDebug)
+{
+	if (bIsOn)
+		C2I_SingletonSocket::GetInstance().SendAsGBP(_val, _targetComponent, _targetCommand, _evName, _isDebug);
+}
+
+void UC2I_SocketBPLibrary::C2I_SendIntAsGPB(int32 _val, FString _targetComponent, FString _targetCommand, FString _evName, bool _isDebug)
+{
+	if (bIsOn)
+		C2I_SingletonSocket::GetInstance().SendAsGBP(_val,_targetComponent, _targetCommand, _evName, _isDebug);
+}
+
+/************************************************************************/
+/* Management                                                           */
+/************************************************************************/
 
 void UC2I_SocketBPLibrary::C2I_Quit()
 {

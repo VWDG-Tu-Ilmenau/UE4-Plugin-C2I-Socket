@@ -30,7 +30,7 @@ ConnectionInterface::~ConnectionInterface()
 
 uint32 ConnectionInterface::Run()
 {
-	UE_LOG(LogTemp, Log, TEXT("Run"));
+	UE_LOG(C2SLog, Log, TEXT("Run"));
 
 	SetupSocketServer();
 	return 3791;
@@ -38,7 +38,7 @@ uint32 ConnectionInterface::Run()
 
 void C2I_Socket::ConnectionInterface::ListenForConnection(FString _ip, int32 _port)
 {
-	UE_LOG(LogTemp, Log, TEXT("ListenForConnection"));
+	UE_LOG(C2SLog, Log, TEXT("ListenForConnection"));
 	
 	SetIP(_ip);
 	SetPort(_port);
@@ -74,11 +74,11 @@ void ConnectionInterface::SetupSocketServer()
 
 	if (bind)
 	{
-		UE_LOG(LogTemp, Log, TEXT("Socket bound."));
+		UE_LOG(C2SLog, Log, TEXT("Socket bound."));
 	}
 	else
 	{
-		UE_LOG(LogTemp, Log, TEXT("Socket not bound.1"));	
+		UE_LOG(C2SLog, Log, TEXT("Socket not bound.1"));	
 		ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->GetSocketError();
 		return;
 	}
@@ -87,11 +87,11 @@ void ConnectionInterface::SetupSocketServer()
 
 	if (listen)
 	{
-		UE_LOG(LogTemp, Log, TEXT("Socket listens."));
+		UE_LOG(C2SLog, Log, TEXT("Socket listens."));
 	}
 	else
 	{
-		UE_LOG(LogTemp, Log, TEXT("Socket not listening."));
+		UE_LOG(C2SLog, Log, TEXT("Socket not listening."));
 		return;
 	}
 
@@ -115,12 +115,10 @@ void ConnectionInterface::Send(FString _val)
 			successful = FinalSocket->Send((uint8*)TCHAR_TO_UTF8(serializedChar), size, sent);
 
 		}
-
 		MyMutex.Unlock();
 	}
 
 }
-
 
 void C2I_Socket::ConnectionInterface::Send(float _val)
 {
@@ -143,8 +141,113 @@ void C2I_Socket::ConnectionInterface::Send(float _val)
 	}
 }
 
+void C2I_Socket::ConnectionInterface::Send(int32 _val)
+{
+	if (MyMutex.TryLock())
+	{
+		FString serialized = FString::FromInt(_val);
+		TCHAR *serializedChar = serialized.GetCharArray().GetData();
+		int32 size = FCString::Strlen(serializedChar);
+		int32 sent = 0;
+		bool successful = false;
+		if (FinalSocket && Socket && bIsSend && bIsConnected)
+		{
+			successful = FinalSocket->Send((uint8*)TCHAR_TO_UTF8(serializedChar), size, sent);
+
+		}
+		MyMutex.Unlock();
+	}
+}
+
+
+void C2I_Socket::ConnectionInterface::SendAsGPB(int32 _val, FString _targetComponent, FString _targetCommand, FString _evName, bool _isDebug)
+{
+	if (MyMutex.TryLock())
+	{
+		
+		//////////////////////////////////////////////////////////////////////////
+		//Get final string
+		
+		std::string res= Gpbhandler_.GetGPBString(_targetComponent, _targetCommand, _evName, _val, _isDebug);
+
+		SendGPB(res);
+
+		MyMutex.Unlock();
+	}
+}
+
+void C2I_Socket::ConnectionInterface::SendAsGPB(float _val, FString  _targetComponent, FString _targetCommand, FString _evName, bool _isDebug)
+{
+	if (MyMutex.TryLock())
+	{
+		std::string res = Gpbhandler_.GetGPBString(_targetComponent, _targetCommand, _evName, _val, _isDebug);
+
+		SendGPB(res);
+
+		MyMutex.Unlock();
+	}
+}
+
+void C2I_Socket::ConnectionInterface::SendAsGPB(FString _val, FString  _targetComponent, FString _targetCommand, FString _evName, bool _isDebug)
+{
+	if (MyMutex.TryLock())
+	{
+		std::string res = Gpbhandler_.GetGPBString(_targetComponent, _targetCommand, _evName, _val, _isDebug);
+
+		SendGPB(res);
+
+		MyMutex.Unlock();
+	}
+}
+
+
+//////////////////////////////////////////////////////////////////////////
+
+void C2I_Socket::ConnectionInterface::SendGPB(std::string res)
+{
+	//////////////////////////////////////////////////////////////////////////
+	//prepare payload size
+	int32 sizePayload = res.length();
+	uint8_t* sizeOfPayloadInBytes = (uint8_t*)&sizePayload;
+
+	//////////////////////////////////////////////////////////////////////////
+	//send size
+	int32 sentSize = 0;
+	bool successfulSize = false;
+	if (FinalSocket && Socket && bIsSend && bIsConnected)
+	{
+		successfulSize = FinalSocket->Send(sizeOfPayloadInBytes, sizeof(int32), sentSize);
+	}
+	if (!successfulSize)
+	{
+		UE_LOG(C2SLog, Log, TEXT("Sending size: unsuccesful."));
+	}
+	if (sentSize != sizeof(int32))
+	{
+		UE_LOG(C2SLog, Log, TEXT("Sending Size size: bytes send != bytes size."));
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	//send payload
+	int32 sentPayload = 0;
+	bool successfulPayload = false;
+	if (FinalSocket && Socket && bIsSend && bIsConnected)
+	{
+		successfulPayload = FinalSocket->Send((uint8_t*)res.c_str(), sizePayload, sentPayload);
+	}
+	if (!successfulPayload)
+	{
+		UE_LOG(C2SLog, Log, TEXT("Sending payload: unsuccesful."));
+	}
+	if (sentPayload != sizeof(int32))
+	{
+		UE_LOG(C2SLog, Log, TEXT("Sending payload size: bytes send != bytes size."));
+	}
+}
+
 void ConnectionInterface::QuitMe()
 {
+	MyMutex.Unlock();
 	MyMutex.Lock();
 	bIsConnected = false;
 	StopSending();
@@ -153,16 +256,16 @@ void ConnectionInterface::QuitMe()
 	if (FinalSocket)
 	{
 		if (!FinalSocket->Close())
-			UE_LOG(LogTemp, Log, TEXT("FinalSocket not closed."));
+			UE_LOG(C2SLog, Log, TEXT("FinalSocket not closed."));
 	}
 
 	if (Socket)
 	{
 		if (!Socket->Close())
-			UE_LOG(LogTemp, Log, TEXT("Socket not closed."));
+			UE_LOG(C2SLog, Log, TEXT("Socket not closed."));
 	}
 
-	UE_LOG(LogTemp, Log, TEXT("All Sockets closed."));
+	UE_LOG(C2SLog, Log, TEXT("All Sockets closed."));
 
 
 	MyMutex.Unlock();

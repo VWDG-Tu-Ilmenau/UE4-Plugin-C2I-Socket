@@ -7,28 +7,12 @@ using namespace C2I_Socket;
 
 C2I_SingletonSocket::C2I_SingletonSocket()
 {
-	UE_LOG(LogTemp, Log, TEXT("C2I_SingletonSocket created."));
 
 }
 
-void C2I_SingletonSocket::QuitMe()
-{
-	UE_LOG(LogTemp, Log, TEXT("C2I_SingletonSocket quit."));
-	if (connectionInterface)
-	{
-		connectionInterface->StopSending();
-		FPlatformProcess::Sleep(1);
-		connectionInterface->QuitMe();
-		delete connectionInterface;
-	}
-}
-
-void C2I_SingletonSocket::Connect()
-{
-	UE_LOG(LogTemp, Log, TEXT("C2I_SingletonSocket connect."));
-	connectionInterface = new ConnectionInterface();
-	connectionInterface->SetupSocketServer();
-}
+/************************************************************************/
+/* Value                                                                */
+/************************************************************************/
 
 void C2I_SingletonSocket::Send(FString _val)
 {
@@ -42,6 +26,38 @@ void C2I_SingletonSocket::Send(float _val)
 		connectionInterface->Send(_val);
 }
 
+void C2I_SingletonSocket::Send(int32 _val)
+{
+	if (connectionInterface)
+		connectionInterface->Send(_val);
+}
+
+
+/************************************************************************/
+/* GPB                                                                  */
+/************************************************************************/
+void C2I_SingletonSocket::SendAsGBP(float _val, FString _targetComponent, FString _targetCommand, FString _evName, bool _isDebug)
+{
+	if (connectionInterface)
+		connectionInterface->SendAsGPB(_val, _targetComponent, _targetCommand, _evName, _isDebug);
+}
+
+void C2I_SingletonSocket::SendAsGBP(FString _val, FString _targetComponent, FString _targetCommand, FString _evName, bool _isDebug)
+{
+	if (connectionInterface)
+		connectionInterface->SendAsGPB(_val, _targetComponent, _targetCommand, _evName, _isDebug);
+}
+
+void C2I_SingletonSocket::SendAsGBP(int32 _val, FString _targetComponent, FString _targetCommand, FString _evName, bool _isDebug)
+{
+	if (connectionInterface)
+		connectionInterface->SendAsGPB(_val, _targetComponent, _targetCommand, _evName, _isDebug);
+}
+
+/************************************************************************/
+/* Management                                                           */
+/************************************************************************/
+
 void C2I_SingletonSocket::StopSending()
 {
 	
@@ -54,4 +70,22 @@ void C2I_Socket::C2I_SingletonSocket::ListenForConnection(FString _ip, int32 _po
 {
 	connectionInterface = new ConnectionInterface();
 	connectionInterface->ListenForConnection(_ip, _port);
+}
+
+void C2I_SingletonSocket::QuitMe()
+{
+	if (connectionInterface)
+	{
+		connectionInterface->StopSending();
+		FPlatformProcess::Sleep(1);
+		connectionInterface->QuitMe();
+		delete connectionInterface;
+	}
+}
+
+void C2I_SingletonSocket::Connect()
+{
+	
+	connectionInterface = new ConnectionInterface();
+	connectionInterface->SetupSocketServer();
 }

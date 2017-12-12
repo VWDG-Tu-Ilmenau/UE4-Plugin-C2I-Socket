@@ -15,16 +15,39 @@ namespace C2I_Socket
 		C2I_SingletonSocket(C2I_SingletonSocket const&) = delete;
 		void operator=(C2I_SingletonSocket const&) = delete;
 
-
-		//DEPRECATED, please use ListenForConnection in production setting.
-		void Connect();
-
+		/************************************************************************/
+		/* value                                                                */
+		/************************************************************************/
+		
 		//Sends a String via an established socket connection.
 		void Send(FString _val);
 
-		//Sends a String via an established socket connection.
+		//Sends a float via an established socket connection.
 		void Send(float _val);
 
+		//Sends a int64 via an established socket connection.
+		void Send(int32 _val);
+
+		/************************************************************************/
+		/* GPB                                                                  */
+		/************************************************************************/
+
+		//Sends a float value packed in a GPB via an established socket connection
+		void SendAsGBP(float _val, FString _targetComponent, FString _targetCommand, FString _evName, bool _isDebug);
+
+		//Sends a float value packed in a GPB via an established socket connection
+		void SendAsGBP(FString _val, FString _targetComponent, FString _targetCommand, FString _evName, bool _isDebug);
+
+		//Sends a float value packed in a GPB via an established socket connection
+		void SendAsGBP(int32 _val, FString _targetComponent, FString _targetCommand, FString _evName, bool _isDebug);
+
+		/************************************************************************/
+		/* Management                                                           */
+		/************************************************************************/
+
+		//DEPRECATED, please use ListenForConnection in production setting.
+		void Connect();
+		
 		//Stops sending with a bool flag.
 		void StopSending();
 
@@ -34,7 +57,6 @@ namespace C2I_Socket
 	private:
 		C2I_SingletonSocket();
 		ConnectionInterface* connectionInterface;
-
 
 	public:
 		void QuitMe();

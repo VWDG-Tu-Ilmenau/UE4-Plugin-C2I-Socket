@@ -1,6 +1,8 @@
 // Some copyright should be here...
 
 using UnrealBuildTool;
+using System.IO;
+using System;
 
 public class C2I_Socket : ModuleRules
 {
@@ -58,5 +60,43 @@ public class C2I_Socket : ModuleRules
 				// ... add any modules that your module loads dynamically here ...
 			}
 			);
-	}
+
+        LoadGoogleProtocolBuffers(Target);
+
+    }
+
+    public bool LoadGoogleProtocolBuffers(ReadOnlyTargetRules Target)
+    {
+        bool isLibrarySupported = false;
+
+        if ((Target.Platform == UnrealTargetPlatform.Win64))
+        {
+            isLibrarySupported = true;
+
+            string LibrariesPath = Path.Combine(ThirdPartyPath, "libprotobuf", "lib");
+
+            Console.WriteLine("... LibrariesPath -> " + LibrariesPath);
+            PublicAdditionalLibraries.Add(Path.Combine(LibrariesPath, "libprotobuf" + ".lib"));
+        }
+
+        if (isLibrarySupported)
+        {
+            string IncludePath = Path.Combine(ThirdPartyPath, "libprotobuf", "include");
+
+            Console.WriteLine("... IncludePath -> " + IncludePath);
+            PrivateIncludePaths.Add(IncludePath);
+        }
+
+        Definitions.Add(string.Format("WITH_GPB_BINDING={0}", isLibrarySupported ? 1 : 0));
+
+        return isLibrarySupported;
+    }
+    private string ModulePath
+    {
+        get { return ModuleDirectory; }
+    }
+    private string ThirdPartyPath
+    {
+        get { return Path.GetFullPath(Path.Combine(ModulePath, "../../ThirdParty/")); }
+    }
 }
