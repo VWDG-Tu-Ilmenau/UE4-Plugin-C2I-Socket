@@ -161,76 +161,88 @@ void C2I_Socket::ConnectionInterface::Send(int32 _val)
 }
 
 
-void C2I_Socket::ConnectionInterface::SendAsGPB(int32 _val, FString _targetComponent, FString _targetCommand, FString _evName)
+void C2I_Socket::ConnectionInterface::SendAsGPB(int32 _val, FString _targetComponent, FString _targetCommand, FString _evName, bool _isDebug)
 {
 	if (MyMutex.TryLock())
 	{
-		//////////////////////////////////////////////////////////////////////////
-		//prepare GPB
-		c2ipb::Call datapacket;
-	   
-		datapacket.set_targetcomponent(TCHAR_TO_UTF8(*_targetComponent));
-		datapacket.set_targetcommand(TCHAR_TO_UTF8(*_targetCommand));
-		c2ipb::Call_Event* datapacketevent = datapacket.mutable_event();
-
-		datapacketevent->set_eventname(TCHAR_TO_UTF8(*_evName));
-		datapacketevent->set_eventtype(c2ipb::Call_Event_EventType_TYPEINT);
-		datapacketevent->set_val_int(_val);
-
+		
 		//////////////////////////////////////////////////////////////////////////
 		//Get final string
-	 	bool isDebug = false;
-		std::string res="";
-		if (isDebug)
-		{
-			res = datapacket.DebugString();
-		}
-		else
-		{
-			datapacket.SerializeToString(&res);
-		}
-		FString f(res.c_str());
+		
+		std::string res= Gpbhandler_.GetGPBString(_targetComponent, _targetCommand, _evName, _val, _isDebug);
 
-		//////////////////////////////////////////////////////////////////////////
-		//prepare payload size
-		int32 sizePayload = res.length();
-		uint8_t* sizeOfPayloadInBytes = (uint8_t*)&sizePayload;
-
-		//////////////////////////////////////////////////////////////////////////
-		//send size
-		int32 sentSize = 0;
-		bool successfulSize = false;
-		if (FinalSocket && Socket && bIsSend && bIsConnected)
-		{
-			successfulSize = FinalSocket->Send(sizeOfPayloadInBytes, sizeof(int32), sentSize);
-		}
-		if (!successfulSize)
-		{
-			UE_LOG(LogTemp, Log, TEXT("Sending size: unsuccesful."));
-		}
-		if (sentSize != sizeof(int32))
-		{
-			UE_LOG(LogTemp, Log, TEXT("Sending Size size: bytes send != bytes size."));
-		}
-
-		//////////////////////////////////////////////////////////////////////////
-		//send payload
-		int32 sentPayload = 0;
-		bool successfulPayload = false;
-		if (FinalSocket && Socket && bIsSend && bIsConnected)
-		{
-			successfulPayload = FinalSocket->Send((uint8_t*)res.c_str(), sizePayload, sentPayload);
-		}
-		if (!successfulPayload)
-		{
-			UE_LOG(LogTemp, Log, TEXT("Sending payload: unsuccesful."));
-		}
-		if (sentSize != sizeof(int32))
-		{
-			UE_LOG(LogTemp, Log, TEXT("Sending payload size: bytes send != bytes size."));
-		}
+		SendGPB(res);
 
 		MyMutex.Unlock();
+	}
+}
+
+void C2I_Socket::ConnectionInterface::SendAsGPB(float _val, FString  _targetComponent, FString _targetCommand, FString _evName, bool _isDebug)
+{
+	if (MyMutex.TryLock())
+	{
+		std::string res = Gpbhandler_.GetGPBString(_targetComponent, _targetCommand, _evName, _val, _isDebug);
+
+		SendGPB(res);
+
+		MyMutex.Unlock();
+	}
+}
+
+void C2I_Socket::ConnectionInterface::SendAsGPB(FString _val, FString  _targetComponent, FString _targetCommand, FString _evName, bool _isDebug)
+{
+	if (MyMutex.TryLock())
+	{
+		std::string res = Gpbhandler_.GetGPBString(_targetComponent, _targetCommand, _evName, _val, _isDebug);
+
+		SendGPB(res);
+
+		MyMutex.Unlock();
+	}
+}
+
+
+//////////////////////////////////////////////////////////////////////////
+
+void C2I_Socket::ConnectionInterface::SendGPB(std::string res)
+{
+	//////////////////////////////////////////////////////////////////////////
+	//prepare payload size
+	int32 sizePayload = res.length();
+	uint8_t* sizeOfPayloadInBytes = (uint8_t*)&sizePayload;
+
+	//////////////////////////////////////////////////////////////////////////
+	//send size
+	int32 sentSize = 0;
+	bool successfulSize = false;
+	if (FinalSocket && Socket && bIsSend && bIsConnected)
+	{
+		successfulSize = FinalSocket->Send(sizeOfPayloadInBytes, sizeof(int32), sentSize);
+	}
+	if (!successfulSize)
+	{
+		UE_LOG(LogTemp, Log, TEXT("Sending size: unsuccesful."));
+	}
+	if (sentSize != sizeof(int32))
+	{
+		UE_LOG(LogTemp, Log, TEXT("Sending Size size: bytes send != bytes size."));
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	//send payload
+	int32 sentPayload = 0;
+	bool successfulPayload = false;
+	if (FinalSocket && Socket && bIsSend && bIsConnected)
+	{
+		successfulPayload = FinalSocket->Send((uint8_t*)res.c_str(), sizePayload, sentPayload);
+	}
+	if (!successfulPayload)
+	{
+		UE_LOG(LogTemp, Log, TEXT("Sending payload: unsuccesful."));
+	}
+	if (sentSize != sizeof(int32))
+	{
+		UE_LOG(LogTemp, Log, TEXT("Sending payload size: bytes send != bytes size."));
 	}
 }
 

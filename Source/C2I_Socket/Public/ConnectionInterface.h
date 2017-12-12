@@ -11,6 +11,8 @@
 #include "MessageC2I_to_Dispatcher.pb.h"
 #include "HideWindowsPlatformTypes.h"
 
+#include "GPBHandler.h"
+
 
 /************************************************************************/
 /* Creates a TCP Server                                                 */
@@ -42,7 +44,9 @@ namespace C2I_Socket
 		void Send(int32 _val);
 
 		//Send a GPB with a value via an established socket connection
-		void SendAsGPB(int32 _val, FString _targetComponent, FString _targetCommand, FString _evName);
+		void SendAsGPB(int32 _val, FString _targetComponent, FString _targetCommand, FString _evName, bool _isDebug =false);
+		void SendAsGPB(float _val, FString _targetComponent, FString _targetCommand, FString _evName, bool _isDebug = false);
+		void SendAsGPB(FString _val, FString _targetComponent, FString _targetCommand, FString _evName, bool _isDebug = false);
 
 		//Closes sockets, and stops sending with a flag.
 		void QuitMe();
@@ -65,5 +69,7 @@ namespace C2I_Socket
 		FString IP = "127.0.0.1";
 		int32 Port = 12345;
 
+		GPBHandler Gpbhandler_;
+		void SendGPB(std::string res);
 	};
 }

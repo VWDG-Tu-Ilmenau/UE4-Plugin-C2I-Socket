@@ -37,20 +37,22 @@ void C2I_SingletonSocket::Send(int32 _val)
 /************************************************************************/
 /* GPB                                                                  */
 /************************************************************************/
-void C2I_SingletonSocket::SendAsGBP(float _val)
-{
-
-}
-
-void C2I_SingletonSocket::SendAsGBP(FString _val)
-{
-	//TODO implement
-}
-
-void C2I_SingletonSocket::SendAsGBP(int32 _val, FString _targetComponent, FString _targetCommand, FString _evName)
+void C2I_SingletonSocket::SendAsGBP(float _val, FString _targetComponent, FString _targetCommand, FString _evName, bool _isDebug)
 {
 	if (connectionInterface)
-		connectionInterface->SendAsGPB(_val, _targetComponent, _targetCommand, _evName);
+		connectionInterface->SendAsGPB(_val, _targetComponent, _targetCommand, _evName, _isDebug);
+}
+
+void C2I_SingletonSocket::SendAsGBP(FString _val, FString _targetComponent, FString _targetCommand, FString _evName, bool _isDebug)
+{
+	if (connectionInterface)
+		connectionInterface->SendAsGPB(_val, _targetComponent, _targetCommand, _evName, _isDebug);
+}
+
+void C2I_SingletonSocket::SendAsGBP(int32 _val, FString _targetComponent, FString _targetCommand, FString _evName, bool _isDebug)
+{
+	if (connectionInterface)
+		connectionInterface->SendAsGPB(_val, _targetComponent, _targetCommand, _evName, _isDebug);
 }
 
 /************************************************************************/

@@ -52,13 +52,13 @@ class UC2I_SocketBPLibrary : public UBlueprintFunctionLibrary
 	/************************************************************************/
 
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "SendViaC2ISocketStringAsGPB", Keywords = "C2I_Socket send socket string GPB"), Category = "C2I")
-		static void C2I_SendStringAsGPB(FString _val);
+		static void C2I_SendStringAsGPB(FString _val, FString _targetComponent, FString _targetCommand, FString _evName, bool _isDebug);
 
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "SendViaC2ISocketFloatAsGPB", Keywords = "C2I_Socket send socket float GPB"), Category = "C2I")
-		static void C2I_SendFloatAsGPB(float _val);
+		static void C2I_SendFloatAsGPB(float _val, FString _targetComponent, FString _targetCommand, FString _evName, bool _isDebug);
 
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "SendViaC2ISocketIntAsGPB", Keywords = "C2I_Socket send socket int GPB"), Category = "C2I")
-		static void C2I_SendIntAsGPB(int32 _val, FString _targetComponent, FString _targetCommand, FString _evName );
+		static void C2I_SendIntAsGPB(int32 _val, FString _targetComponent, FString _targetCommand, FString _evName, bool _isDebug);
 
 	/************************************************************************/
 	/* Management methods                                                   */
