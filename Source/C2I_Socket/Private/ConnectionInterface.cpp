@@ -141,7 +141,6 @@ void C2I_Socket::ConnectionInterface::Send(float _val)
 	}
 }
 
-//untested!
 void C2I_Socket::ConnectionInterface::Send(int32 _val)
 {
 	if (MyMutex.TryLock())
@@ -248,6 +247,7 @@ void C2I_Socket::ConnectionInterface::SendGPB(std::string res)
 
 void ConnectionInterface::QuitMe()
 {
+	MyMutex.Unlock();
 	MyMutex.Lock();
 	bIsConnected = false;
 	StopSending();
