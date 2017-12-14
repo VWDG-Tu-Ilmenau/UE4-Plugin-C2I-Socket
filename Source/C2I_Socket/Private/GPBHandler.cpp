@@ -81,7 +81,7 @@ std::string GPBHandler::GetGPBString(FString _targetComponent, FString _targetCo
 	c2ipb::Call_Event* datapacketevent = datapacket.mutable_event();
 
 	datapacketevent->set_eventname(TCHAR_TO_UTF8(*_evName));
-	datapacketevent->set_eventtype(c2ipb::Call_Event_EventType_TYPEINT);
+	datapacketevent->set_eventtype(c2ipb::Call_Event_EventType_TYPECALL);
 	datapacketevent->set_val_string(TCHAR_TO_UTF8(*_val));
 
 	if (_isDebug)
