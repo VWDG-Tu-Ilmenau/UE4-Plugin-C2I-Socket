@@ -159,16 +159,13 @@ void C2I_Socket::ConnectionInterface::Send(int32 _val)
 	}
 }
 
-
+//////////////////////////////////////////////////////////////////////////
+//int
 void C2I_Socket::ConnectionInterface::SendAsGPB(int32 _val, FString _targetComponent, FString _targetCommand, FString _evName, bool _isDebug)
 {
 	if (MyMutex.TryLock())
 	{
-		
-		//////////////////////////////////////////////////////////////////////////
-		//Get final string
-		
-		std::string res= Gpbhandler_.GetGPBString(_targetComponent, _targetCommand, _evName, _val, _isDebug);
+			std::string res= Gpbhandler_.GetGPBString(_targetComponent, _targetCommand, _evName, _val, _isDebug);
 
 		SendGPB(res);
 
@@ -176,6 +173,7 @@ void C2I_Socket::ConnectionInterface::SendAsGPB(int32 _val, FString _targetCompo
 	}
 }
 
+//float
 void C2I_Socket::ConnectionInterface::SendAsGPB(float _val, FString  _targetComponent, FString _targetCommand, FString _evName, bool _isDebug)
 {
 	if (MyMutex.TryLock())
@@ -188,6 +186,7 @@ void C2I_Socket::ConnectionInterface::SendAsGPB(float _val, FString  _targetComp
 	}
 }
 
+//string
 void C2I_Socket::ConnectionInterface::SendAsGPB(FString _val, FString  _targetComponent, FString _targetCommand, FString _evName, bool _isDebug)
 {
 	if (MyMutex.TryLock())
@@ -202,7 +201,6 @@ void C2I_Socket::ConnectionInterface::SendAsGPB(FString _val, FString  _targetCo
 
 
 //////////////////////////////////////////////////////////////////////////
-
 void C2I_Socket::ConnectionInterface::SendGPB(std::string res)
 {
 	//////////////////////////////////////////////////////////////////////////
