@@ -239,7 +239,7 @@ void C2I_Socket::ConnectionInterface::SendGPB(std::string res)
 	{
 		UE_LOG(C2SLog, Log, TEXT("Sending payload: unsuccesful."));
 	}
-	if (sentPayload != sizeof(int32))
+	if (sentPayload != sizePayload)
 	{
 		UE_LOG(C2SLog, Log, TEXT("Sending payload size: bytes send != bytes size."));
 	}
