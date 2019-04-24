@@ -247,6 +247,9 @@ void ConnectionInterface::QuitMe()
 {
 	MyMutex.Unlock();
 	MyMutex.Lock();
+	if (!bIsConnected)
+		return;
+	
 	bIsConnected = false;
 	StopSending();
 

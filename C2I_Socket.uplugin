@@ -10,15 +10,19 @@
 	"DocsURL": "",
 	"MarketplaceURL": "",
 	"SupportURL": "",
+	"EngineVersion": "4.18.0",
 	"CanContainContent": true,
 	"IsBetaVersion": true,
-	"Installed": false,
+	"Installed": true,
 	"Modules": [
-    {
-      "Name": "C2I_Socket",
-      "Type": "Developer",
-      "LoadingPhase": "Default",
-      "BlacklistPlatforms": [ "IOS", "HTML5" ]
-    }
+		{
+			"Name": "C2I_Socket",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"BlacklistPlatforms": [
+				"IOS",
+				"HTML5"
+			]
+		}
 	]
 }
