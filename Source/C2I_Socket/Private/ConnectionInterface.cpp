@@ -25,7 +25,30 @@ ConnectionInterface::ConnectionInterface()
 
 ConnectionInterface::~ConnectionInterface()
 {
+	MyMutex.Unlock();
+	if (!bIsConnected)
+		return;
+	MyMutex.Lock();
+	bIsConnected = false;
+	StopSending();
 
+	FPlatformProcess::Sleep(1);
+	if (FinalSocket)
+	{
+		if (!FinalSocket->Close())
+			UE_LOG(C2SLog, Log, TEXT("FinalSocket not closed."));
+	}
+
+	if (Socket)
+	{
+		if (!Socket->Close())
+			UE_LOG(C2SLog, Log, TEXT("Socket not closed."));
+	}
+
+	UE_LOG(C2SLog, Log, TEXT("All Sockets closed."));
+
+
+	MyMutex.Unlock();
 }
 
 uint32 ConnectionInterface::Run()
@@ -245,31 +268,7 @@ void C2I_Socket::ConnectionInterface::SendGPB(std::string res)
 
 void ConnectionInterface::QuitMe()
 {
-	MyMutex.Unlock();
-	MyMutex.Lock();
-	if (!bIsConnected)
-		return;
 	
-	bIsConnected = false;
-	StopSending();
-
-	FPlatformProcess::Sleep(1);
-	if (FinalSocket)
-	{
-		if (!FinalSocket->Close())
-			UE_LOG(C2SLog, Log, TEXT("FinalSocket not closed."));
-	}
-
-	if (Socket)
-	{
-		if (!Socket->Close())
-			UE_LOG(C2SLog, Log, TEXT("Socket not closed."));
-	}
-
-	UE_LOG(C2SLog, Log, TEXT("All Sockets closed."));
-
-
-	MyMutex.Unlock();
 
 }
 

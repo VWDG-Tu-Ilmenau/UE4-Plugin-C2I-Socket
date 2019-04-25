@@ -13,8 +13,6 @@ public class C2I_Socket : ModuleRules
 
         PublicIncludePaths.AddRange(
 			new string[] {
-				"C2I_Socket/Public"
-				
 				// ... add public include paths required here ...
 			}
 			);
@@ -87,7 +85,7 @@ public class C2I_Socket : ModuleRules
             PrivateIncludePaths.Add(IncludePath);
         }
 
-        Definitions.Add(string.Format("WITH_GPB_BINDING={0}", isLibrarySupported ? 1 : 0));
+        PublicDefinitions.Add(string.Format("WITH_GPB_BINDING={0}", isLibrarySupported ? 1 : 0));
 
         return isLibrarySupported;
     }
